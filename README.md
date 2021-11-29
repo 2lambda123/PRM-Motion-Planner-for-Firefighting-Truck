@@ -53,3 +53,10 @@ Here is a graph on the computational time required for running a 3 minute simula
 
 ![time](https://user-images.githubusercontent.com/53962958/143950861-5805692a-e244-4002-99be-f2d719258a9c.png)
 
+# References
+
+* Steven M. LaValle. Planning Algorithms. Cambridge University Press, May 2006.
+9780521862059. URL http://lavalle.pl/planning/.
+* https://canvas.wpi.edu
+* https://demonstrations.wolfram.com/ProbabilisticRoadmapMethod/
+
