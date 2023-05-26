@@ -1,5 +1,9 @@
 # Motion_Planning_for_Firefighting_Truck
 
+## Result
+![prm](https://github.com/gprajwalpoojari/Motion_Planning_for_Firefighting_Truck/assets/53962958/9aac0b2b-df01-4416-868e-c58ba7783e4d)
+
+
 ## About the Project
 
 The goal of this project is to implement a motion planning algorithm for a firetruck that must plan paths to the most important fire to fight, as fires spread, and new fires get started. This project is implemented using the pygame library of python. The environment for the same is simulated as a two dimensional grid world.
