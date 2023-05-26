@@ -1,6 +1,6 @@
 # PRM Motion Planner for Firefighting Truck
 
-## Result
+## Demo
 ![prm](https://github.com/gprajwalpoojari/Motion_Planning_for_Firefighting_Truck/assets/53962958/9aac0b2b-df01-4416-868e-c58ba7783e4d)
 
 
