@@ -1,7 +1,7 @@
 import global_v
 import math
 import world
-import random
+import secrets
 
 class Robot:
     def __init__(self, width, length, wheelbase, turning_radius, max_velocity, position, heading): ## Heading is in radians
@@ -137,10 +137,10 @@ class Robot:
 def spawn_robot(grid):
     condition = True
     while condition:    
-        x_position = random.randint(10, global_v.ROWS-10)
-        y_position = random.randint(10, global_v.ROWS-10)
+        x_position = secrets.SystemRandom().randint(10, global_v.ROWS-10)
+        y_position = secrets.SystemRandom().randint(10, global_v.ROWS-10)
         position = x_position, y_position
-        heading = random.randint(0, 360)
+        heading = secrets.SystemRandom().randint(0, 360)
         heading = heading * math.pi/180
         robot = Robot(global_v.width, global_v.length, global_v.wheelbase, global_v.turning_radius, global_v.max_velocity, position, heading)
         robot.make_robot()

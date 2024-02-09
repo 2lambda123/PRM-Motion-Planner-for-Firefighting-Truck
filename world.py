@@ -1,13 +1,12 @@
 import pygame
 import math
-import random
 from global_v import *
 from robot import *
 import threading
-import random
 from collections import deque
 import algorithms
 import time
+import secrets
 
 
 class Block:
@@ -113,7 +112,7 @@ class World:
     def make_random_obstacle(self):
         self.obstacle.clear()
         tetris = ['I', 'r', 'N', 'T']
-        value = random.choice(tetris)
+        value = secrets.SystemRandom().choice(tetris)
         if (value == 'I'):
             for i in range(1):
                 self.obstacle.append([])
@@ -180,8 +179,8 @@ class World:
                 self.make_random_obstacle()
                 max_row = round((self.OBSTACLE_ROWS - 1)/2) - len(self.obstacle)
                 max_col = round((self.OBSTACLE_ROWS - 1)/2) - len(self.obstacle[0])
-                random_row = random.randint(-max_row - len(self.obstacle), max_row)
-                random_col = random.randint(-max_col - len(self.obstacle[0]), max_col)
+                random_row = secrets.SystemRandom().randint(-max_row - len(self.obstacle), max_row)
+                random_col = secrets.SystemRandom().randint(-max_col - len(self.obstacle[0]), max_col)
                 if (self.check_overlap(random_row + x, random_col + y) == False):
                     self.intact_count += 1
                     self.total_count += 1
@@ -216,8 +215,8 @@ class World:
             y = round((self.OBSTACLE_ROWS + 1) / 2)
         count = 0
         while (count < total_forest_patches):
-            i = random.randint(0, len(patch_locations) - 1)
-            j = random.randint(0, len(patch_locations) - 1)
+            i = secrets.SystemRandom().randint(0, len(patch_locations) - 1)
+            j = secrets.SystemRandom().randint(0, len(patch_locations) - 1)
             value = patch_locations[i][j]
             status = value[2]
             if (status == 0):
@@ -250,14 +249,14 @@ class World:
         
 
     def ignite(self):
-        i = random.randint(0, len(self.patch_centers) - 1)
-        j = random.randint(0, len(self.patch_obstacle_coordinates[i]) - 1)
+        i = secrets.SystemRandom().randint(0, len(self.patch_centers) - 1)
+        j = secrets.SystemRandom().randint(0, len(self.patch_obstacle_coordinates[i]) - 1)
         while(self.patch_obstacle_status[i][j] == True):
             if (self.burned_count / self.total_count == 1):
                 print("Forest completely burnt!")
                 return False
-            i = random.randint(0, len(self.patch_centers) - 1)
-            j = random.randint(0, len(self.patch_obstacle_coordinates[i]) - 1)
+            i = secrets.SystemRandom().randint(0, len(self.patch_centers) - 1)
+            j = secrets.SystemRandom().randint(0, len(self.patch_obstacle_coordinates[i]) - 1)
         self.ignite_patch_center = i
         self.ignite_patch_obstacle = j
         fire_obs = i, j
