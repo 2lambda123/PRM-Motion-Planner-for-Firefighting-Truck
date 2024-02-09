@@ -11,6 +11,8 @@ import secrets
 
 class Block:
     def __init__(self, row, col, color, size, type):
+        """"""
+        
         self.row = row
         self.col = col
         self.size = size
@@ -20,10 +22,14 @@ class Block:
         self.type = type
 
     def draw_block(self, world):
+        """"""
+        
         pygame.draw.rect(world, self.color, (self.x, self.y, self.size, self.size))
 
 class World:
     def __init__(self, SIZE, ROWS, CONFIGURATION_SPACE, VERTICES, EDGES, OBSTACLE_ROWS, PATCH_DENSITY, FOREST_DENSITY):
+        """"""
+        
         self.world = []
         self.SIZE = SIZE
         self.ROWS = ROWS
@@ -54,9 +60,13 @@ class World:
         self.NNlist = []
 
     def create_world(self):
+        """"""
+        
         return pygame.display.set_mode((self.SIZE, self.SIZE))
 
     def reset_world(self):
+        """"""
+        
         for row in self.grid:
             for element in row:
                 if (element.color == BLACK or element.color == RED):
@@ -77,6 +87,8 @@ class World:
 
 
     def initialize_world(self):
+        """"""
+        
         self.world = self.create_world()
         for i in range(self.ROWS):
             self.grid.append([])
@@ -92,17 +104,23 @@ class World:
 
 
     def reinitialize(self):
+        """"""
+        
         for i in range(self.ROWS):
             for j in range(self.ROWS):
                 DISTANCE[i][j] = (math.inf)
                 PREVIOUS[i][j] = []
     def draw_grid_borders(self):
+        """"""
+        
         for i in range(self.ROWS):
             pygame.draw.line(self.world, BLACK, (0, i * self.block_size), (self.SIZE, i * self.block_size))
             for j in range(self.ROWS):
                 pygame.draw.line(self.world, BLACK, (j * self.block_size, 0), (j * self.block_size, self.SIZE))
 
     def draw(self):
+        """"""
+        
         for row in self.grid:
             for block in row:
                 block.draw_block(self.world)
@@ -110,6 +128,8 @@ class World:
         pygame.display.update()
 
     def make_random_obstacle(self):
+        """"""
+        
         self.obstacle.clear()
         tetris = ['I', 'r', 'N', 'T']
         value = secrets.SystemRandom().choice(tetris)
@@ -157,6 +177,8 @@ class World:
                     self.obstacle[i].append(block)
 
     def check_overlap(self, random_row, random_col):
+        """"""
+        
         for i in range(len(self.obstacle)):
             for j in range(len(self.obstacle[i])):
                 if (self.obstacle[i][j].color == GREEN and self.grid[random_row + i][random_col + j].color == GREEN):
@@ -164,6 +186,8 @@ class World:
         return False
 
     def place_random_obstacle(self, x, y):
+        """"""
+        
         cells = self.OBSTACLE_ROWS ** 2
         obs_cells = self.PATCH_DENSITY * cells
         count = 0
@@ -199,6 +223,8 @@ class World:
         return obstacle_data, obstacle_status
 
     def draw_world(self):
+        """"""
+        
         self.initialize_world()
         total_possible_patches = (self.ROWS // self.OBSTACLE_ROWS) ** 2
         total_forest_patches = round(self.FOREST_DENSITY * total_possible_patches)
@@ -234,6 +260,8 @@ class World:
         self.draw()
 
     def ignite_area(self, i, j):
+        """"""
+        
         if (self.patch_obstacle_status[i][j] == False):
             for k in range(len(self.patch_obstacle_coordinates[i][j])):
                 coordinate = self.patch_obstacle_coordinates[i][j][k]
@@ -249,6 +277,8 @@ class World:
         
 
     def ignite(self):
+        """"""
+        
         i = secrets.SystemRandom().randint(0, len(self.patch_centers) - 1)
         j = secrets.SystemRandom().randint(0, len(self.patch_obstacle_coordinates[i]) - 1)
         while(self.patch_obstacle_status[i][j] == True):
@@ -276,6 +306,8 @@ class World:
             threading.Timer(10, self.simulate_fire_spread).start()
 
     def simulate_fire_spread(self):
+        """"""
+        
         x = self.ignite_patch_center
         y = self.ignite_patch_obstacle
         if (self.patch_obstacle_status[x][y] == True):
@@ -299,10 +331,22 @@ class World:
             # threading.Timer(5, self.simulate_fire_spread).start()
 
     def simulate_burning_world(self):
+        """Simulates the burning of the world by igniting the object.
+        Parameters:
+            - self (object): The object to be ignited.
+        Returns:
+            - None: This function does not return anything.
+        Processing Logic:
+            - Calls the ignite() method.
+            - Ignites the object.
+            - No other actions are taken."""
+        
         self.ignite()
         # threading.Timer(10, self.simulate_fire_spread).start()
 
     def extinguish(self, robot):
+        """"""
+        
         for fire in range(len(self.queue)):
             # print(len(self.queue))
             # print(fire)
@@ -326,6 +370,48 @@ class World:
                 
 
     def fight_fire(self):
+        """Fight fire in a simulated environment using A-Star and PRM planning algorithms.
+        Parameters:
+            - self (object): The environment object.
+        Returns:
+            - parameters (list): A list containing the percentage of intact and extinguished patches after the simulation is complete.
+        Processing Logic:
+            - Initialize the environment and robot.
+            - Set the simulation time to 360 seconds.
+            - While the simulation time has not elapsed:
+                - If there are patches in the queue:
+                    - Set the robot's start position to its current position and heading.
+                    - Set the goal position to the first patch in the queue.
+                    - If the patch is on fire:
+                        - Call the A-Star algorithm to find a path to the patch.
+                        - Add the time taken by the A-Star algorithm to the total A-Star time.
+                    - Remove the first patch from the queue.
+                    - Reinitialize the environment.
+                - If the queue is empty:
+                    - Continue the simulation.
+            - Print a message when the simulation is complete.
+            - Calculate the percentage of intact and extinguished patches and add it to the parameters list.
+            - Cancel the timers for igniting the fire and simulating its spread.
+            - Print the parameters list.
+            - Print the total A-Star and PRM times.
+            - Reset the environment.
+            - Set the simulation time to 360 seconds.
+            - While the simulation time has not elapsed:
+                - If there are patches in the queue:
+                    - Set the robot's start position to its current position and heading.
+                    - Set the goal position to the first patch in the queue.
+                    - If the patch is on fire:
+                        - Call the PRM algorithm to find a path to the patch.
+                        - Add the time taken by the PRM algorithm to the total PRM time.
+                    - Remove the first patch from the queue.
+                    - Reinitialize the environment.
+                - If the queue is empty:
+                    - Continue the simulation.
+            - Print a message when the simulation is complete.
+            - Calculate the percentage of intact and extinguished patches and add it to the parameters list.
+            - Print the parameters list.
+            - Print the total A-Star and PRM times."""
+        
         parameters = []
         pygame.display.set_caption('A-Star Planner')
         robot = spawn_robot(self.grid)
