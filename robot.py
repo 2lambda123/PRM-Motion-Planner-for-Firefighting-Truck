@@ -5,6 +5,8 @@ import secrets
 
 class Robot:
     def __init__(self, width, length, wheelbase, turning_radius, max_velocity, position, heading): ## Heading is in radians
+        """"""
+        
         self.color = global_v.BLUE
         self.width = width
         self.length = length
@@ -21,6 +23,8 @@ class Robot:
         self.robot = []
 
     def make_end_point_pairs(self):
+        """"""
+        
         self.robot_lines.clear()
         for j in range(len(self.robot_points)):
             line = []
@@ -32,6 +36,26 @@ class Robot:
             self.robot_lines.append(line)
 
     def make_bresenham_lines(self):
+        """Function to convert a list of robot lines into a list of rasterized lines.
+        Parameters:
+            - robot_lines (list): List of robot lines to be converted.
+        Returns:
+            - rasterized_lines (list): List of rasterized lines.
+        Processing Logic:
+            - Clear the rasterized_lines list.
+            - For each line in robot_lines:
+                - Get the starting and ending coordinates.
+                - Initialize an empty list for the line.
+                - Calculate the change in x and y.
+                - Determine the direction of movement in x and y.
+                - Calculate the error.
+                - While the coordinates have not reached the end point:
+                    - Calculate the error.
+                    - Move the coordinates in the appropriate direction.
+                    - Add the current coordinates to the line list.
+                - Add the end point to the line list.
+                - Add the line list to the rasterized_lines list."""
+        
         self.rasterized_lines.clear()
         for i in self.robot_lines:
             x, y = i[0]
@@ -57,6 +81,8 @@ class Robot:
             self.rasterized_lines.append(line)
 
     def make_filled_polygon(self):
+        """"""
+        
         block_size = global_v.SIZE // global_v.ROWS
         self.robot.clear()
         x0 = []
@@ -89,6 +115,8 @@ class Robot:
         x1.clear()
 
     def make_robot(self):
+        """"""
+        
         points = [[3, 1], [3, -1], [-1, -1], [-1, 1]]
         for i, point in enumerate(points):
             a = point[0] * math.cos(self.heading) - point[1] * math.sin(self.heading)
@@ -104,17 +132,32 @@ class Robot:
         return False
         
     def draw_robot(self, grid):
+        """"""
+        
         for i in range(len(self.robot)):
             for j in range(len(self.robot[i])):
                 grid[self.robot[i][j].row][self.robot[i][j].col].color = self.robot[i][j].color
         grid[self.position[0]][self.position[1]].color = global_v.ROBOT_CENTER
     
     def clear_robot(self, grid):
+        """"""
+        
         for i in range(len(self.robot)):
             for j in range(len(self.robot[i])):
                 grid[self.robot[i][j].row][self.robot[i][j].col].color = global_v.WHITE
 
     def check_collision(self, grid):
+        """Checks for collisions between the robot and obstacles on the grid.
+        Parameters:
+            - grid (list): A 2D list representing the grid with colored blocks.
+        Returns:
+            - bool: True if there is a collision, False otherwise.
+        Processing Logic:
+            - Loop through each block in the robot's position.
+            - Get the color of the block on the grid.
+            - If the color is green, red, or black, there is a collision.
+            - Return True if there is a collision, False otherwise."""
+        
         for i in range(len(self.robot)):
             for j in range(len(self.robot[i])):
                 block_color = grid[self.robot[i][j].row][self.robot[i][j].col].color
@@ -125,6 +168,8 @@ class Robot:
 
 ## Returns true if the configuration is possible
     def check_possible_config(self, grid, position, heading):
+        """"""
+        
         temp_robot = Robot(self.width, self.length, self.wheelbase, self.turning_radius, self.max_velocity, position, heading)
         value = temp_robot.make_robot()
         if (temp_robot.check_collision(grid) == False and value == False):
@@ -135,6 +180,18 @@ class Robot:
 
 
 def spawn_robot(grid):
+    """Spawns a robot on a given grid.
+    Parameters:
+        - grid (list): A grid representing the environment in which the robot will be spawned.
+    Returns:
+        - robot (Robot): The robot object that has been spawned on the grid.
+    Processing Logic:
+        - Generate random x and y positions for the robot.
+        - Generate a random heading for the robot.
+        - Create a Robot object with the given parameters.
+        - Check if the robot will collide with any obstacles on the grid.
+        - If there is no collision, draw the robot on the grid and return it."""
+    
     condition = True
     while condition:    
         x_position = secrets.SystemRandom().randint(10, global_v.ROWS-10)
